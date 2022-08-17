@@ -1,3 +1,5 @@
+[![Docker Image CI](https://github.com/acoby/benno-mailarchive/actions/workflows/docker-image.yml/badge.svg)](https://github.com/acoby/benno-mailarchive/actions/workflows/docker-image.yml)
+
 # Benno Mailarchive
 
 This image runs [Benno MailArchiv](http://www.benno-mailarchiv.de/), an audit-proof and conformable to law e-mail retention system, including benno-lib, benno-core, benno-archive, benno-rest-lib, benno-rest, benno-smtp, benno-web and benno-imap.
