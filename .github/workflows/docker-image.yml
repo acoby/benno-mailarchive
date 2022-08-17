@@ -17,11 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Checkout github repository
+        uses: actions/checkout@v3
 
       - name: Login to DockerHub
         uses: docker/login-action@v1 
@@ -36,16 +33,12 @@ jobs:
           images: ${{ env.DOCKERHUB_IMAGE }}
 
       - name: Build and push
-        id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }},${{ env.DOCKERHUB_IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Checkout github repository
-        uses: actions/checkout@v2
 
       - name: Update Github Workflow to avoid disabling of Github Actions
         uses: gautamkrishnar/keepalive-workflow@master # using the workflow with default settings
