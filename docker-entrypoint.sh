@@ -38,6 +38,7 @@ chown -R root:adm ${APACHE_LOG_DIR} && chmod 750 ${APACHE_LOG_DIR}
 chown -R benno:benno /srv/benno/archive /srv/benno/inbox
 chmod 755 /srv/benno/archive
 chmod 770 /srv/benno/inbox
+chmod 755 /etc/init.d/benno*
 
 # starting benno services
 echo "Start Benno Rest"
