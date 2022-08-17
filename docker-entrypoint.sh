@@ -41,18 +41,18 @@ chmod 770 /srv/benno/inbox
 
 # starting benno services
 echo "Start Benno Rest"
-/etc/init.d/benno-rest restart &>/dev/null
+/etc/init.d/benno-rest start
 echo "Start Benno Archive"
-/etc/init.d/benno-archive start &>/dev/null
+/etc/init.d/benno-archive start
 echo "Start Benno Smtp"
-/etc/init.d/benno-smtp start &>/dev/null
+/etc/init.d/benno-smtp start
 
 echo "Start Apache2"
 rm -Rf /var/run/apache2
-/etc/init.d/apache2 start &>/dev/null
+/etc/init.d/apache2 start
 
 echo "Start Postfix"
-/etc/init.d/postfix restart &>/dev/null
+/etc/init.d/postfix restart
 
 # show logs on default console
 echo "Trace Log Files..."

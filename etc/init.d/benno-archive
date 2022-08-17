@@ -1,0 +1,148 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          benno-archive
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts the archiving service of Benno MailArchiv
+# Description:       This file should be used to construct scripts to be
+#                    placed in /etc/init.d.
+### END INIT INFO
+
+# Author: Martin Werthmoeller <mw@lw-systems.de>
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Benno Mailarchive Archiving Service"
+NAME="benno-archive"
+DAEMON=/usr/bin/java
+JAR_FILE=bennoarchive.jar
+START_JAR="-jar $JAR_FILE"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+BENNOCOREDIR=/opt/benno
+LOG_CONFIG=/etc/benno/bennoarchive-log4j.xml
+CACHE_DIR=/var/cache/benno-archive
+
+# Exit if the package is not installed
+[ -f "$BENNOCOREDIR/$JAR_FILE" ] || exit 0
+
+LANG=C; export LANG
+LC_CTYPE="en_US.UTF-8"; export LC_CTYPE
+DAEMON_ADDRESS='127.0.0.1'
+DAEMON_PORT='2555'
+
+# check java version
+JAVA7=/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+[ -x $JAVA7 ] && DAEMON=$JAVA7
+JAVA8=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+[ -x $JAVA8 ] && DAEMON=$JAVA8
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+if [ "$START_ARCHIVE"x != "yes"x ]; then
+                echo "$NAME disabled: not starting. To enable it edit /etc/default/$NAME"
+                exit 0
+fi
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+  echo "Starting Benno Archiver ..."
+  start-stop-daemon -b --start --chdir $BENNOCOREDIR --chuid $USER \
+        --make-pidfile --pidfile $PIDFILE \
+        --umask 027 --exec $DAEMON -- \
+        -Dlog4j.configuration=$LOG_CONFIG \
+        -Dpdfbox.fontcache=$CACHE_DIR \
+        $JAVA_OPTIONS \
+        $START_JAR \
+        -b $DAEMON_ADDRESS \
+        -p $DAEMON_PORT \
+        $DAEMON_ARGS 
+    return $?
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+  # Return
+  #   0 if daemon has been stopped
+  #   1 if daemon was already stopped
+  #   2 if daemon could not be stopped
+  #   other if a failure occurred
+    echo stop | /opt/benno/sbin/benno-mgmt $DAEMON_ADDRESS $DAEMON_PORT >/dev/null
+    return 0
+}
+
+#
+# Function that sends a SIGHUP to the daemon/service
+#
+do_reload() {
+  start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE
+  return 0
+}
+
+case "$1" in
+  start)
+  [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+  do_start
+  case "$?" in
+    0) log_end_msg 0 ;;
+    1) log_end_msg 1 ;;
+  esac
+  ;;
+  stop)
+  [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+  do_stop
+  case "$?" in
+    0) log_end_msg 0 ;;
+    1) log_end_msg 1 ;;
+  esac
+  ;;
+  reload)
+  log_daemon_msg "Reloading $DESC" "$NAME"
+  do_reload
+  log_end_msg $?
+  ;;
+  restart|force-reload)
+  log_daemon_msg "Restarting $DESC" "$NAME"
+  do_stop
+    sleep 2
+  case "$?" in
+    0|1)
+    do_start
+    case "$?" in
+      0) log_end_msg 0 ;;
+      1) log_end_msg 1 ;; # Old process is still running
+      *) log_end_msg 1 ;; # Failed to start
+    esac
+    ;;
+    *)
+      # Failed to stop
+    log_end_msg 1
+    ;;
+  esac
+  ;;
+  status)
+  status_of_proc -p ${PIDFILE} /opt/benno/bennoarchive.jar benno-archive && exit 0 || exit $?
+  ;;
+  *)
+  echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
+  exit 3
+  ;;
+esac

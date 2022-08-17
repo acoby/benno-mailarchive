@@ -16,9 +16,13 @@ ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 ENV TZ=Europe/Berlin
 
+COPY etc/init.d/benno-archive /etc/init.d/benno-archive
+COPY etc/init.d/benno-rest /etc/init.d/benno-rest
+COPY etc/init.d/benno-smtp /etc/init.d/benno-smtp
+
+RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y
 RUN echo $TZ | tee /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata \
-    && apt-get update \
 		&& apt-get install -y \
 		  wget \
 		  dialog \
@@ -65,6 +69,7 @@ RUN echo $TZ | tee /etc/timezone \
     # && dpkg update && dpkg install benno-web \
     && rm -Rf /etc/apache2/conf-available/benno.conf /etc/apache2/conf-enabled/benno.conf \
     && rm -Rf /etc/benno-web/apache-2.2.conf /etc/benno-web/apache-2.4.conf \
+    && chmod 755 /etc/init.d/benno-* \
     && apt-get autoremove --purge \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/*
