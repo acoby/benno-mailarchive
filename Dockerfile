@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:buster
 
 LABEL maintainer="Thoralf Rickert-Wendt <trw@acoby.de>"
 
