@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 LABEL maintainer="Thoralf Rickert-Wendt <trw@acoby.de>"
 
@@ -51,6 +51,7 @@ RUN echo $TZ | tee /etc/timezone \
       sqlite3 \
       postfix \
       libnet-ldap-perl \
+      libterm-readkey-perl \
       libdbd-mysql-perl \
       libcrypt-eksblowfish-perl \
       libdata-entropy-perl \
