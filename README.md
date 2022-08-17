@@ -1,8 +1,8 @@
-[![](https://images.microbadger.com/badges/image/mminks/docker-benno-mailarchive.svg)](https://microbadger.com/images/mminks/docker-benno-mailarchive "Get your own image badge on microbadger.com")
-
-# About this Repo
+# Benno Mailarchive
 
 This image runs [Benno MailArchiv](http://www.benno-mailarchiv.de/), an audit-proof and conformable to law e-mail retention system, including benno-lib, benno-core, benno-archive, benno-rest-lib, benno-rest, benno-smtp, benno-web and benno-imap.
+
+This repository is a fork of [MMinks Docker Benno Mailarchiv](https://github.com/mminks/docker-benno-mailarchive) to contain some acoby specific extensions and enable automatic rebuild of the image via Github Actions.
 
 # Versions
 

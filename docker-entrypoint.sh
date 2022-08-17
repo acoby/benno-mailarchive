@@ -28,7 +28,7 @@ benno-useradmin -u admin -p $BENNO_ADMIN_PASSWORD
 
 # set owner and rights of volumes
 chown -R benno:benno /var/log/benno && chmod 770 /var/log/benno
-chown -R root:adm /var/log/apache2 && chmod 750 /var/log/apache2
+chown -R root:adm ${APACHE_LOG_DIR} && chmod 750 ${APACHE_LOG_DIR}
 chown -R benno:benno /srv/benno/archive /srv/benno/inbox
 chmod 755 /srv/benno/archive
 chmod 770 /srv/benno/inbox
@@ -44,4 +44,4 @@ rm -Rf /var/run/apache2
 /etc/init.d/postfix restart &>/dev/null
 
 # show logs on default console
-exec /usr/bin/tail -f /var/log/benno/*.log /var/log/apache2/*.log
+exec /usr/bin/tail -f /var/log/benno/*.log ${APACHE_LOG_DIR}/*.log

@@ -1,8 +1,16 @@
-FROM debian:buster
+FROM debian:bullseye
 
-LABEL maintainer="Meik Minks <mminks@inoxio.de>"
+LABEL maintainer="Thoralf Rickert-Wendt <trw@acoby.de>"
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TARGETARCH
+
+ARG VCS_URL
+ARG VCS_REF
+ARG BUILD_DATE
+ARG BUILD_VERSION
+ARG BUILD_BRANCH
+
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
