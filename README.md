@@ -10,14 +10,12 @@ This repository is a fork of [MMinks Docker Benno Mailarchiv](https://github.com
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| benno-archive | 2.8.0 | Benno MailArchiv Archiving Application |
-| benno-core | 2.8.0 | Benno MailArchiv Core |
-| benno-lib | 2.8.0 | Benno MailArchiv Core libraries from external sources |
-| benno-rest | 2.8.0 | Benno MailArchiv REST interface |
-| benno-rest-lib | 2.8.0 | Benno MailArchiv REST interface core libraries |
+| benno-archive | 2.8.17 | Benno MailArchiv Archiving Application |
+| benno-core | 2.8.16 | Benno MailArchiv Core |
+| benno-rest | 2.8.16 | Benno MailArchiv REST interface |
 | benno-smtp | 2.6.0 | Benno MailArchiv SMTP Interface |
-| benno-web | 2.8.0 | Benno MailArchiv web interface |
-| benno-imap | 2.6.10 | Benno MailArchiv imap connector |
+| benno-web | 2.8.17 | Benno MailArchiv web interface |
+| benno-imap | 3.0.3-1 | Benno MailArchiv imap connector |
 
 # How to use this image
 
