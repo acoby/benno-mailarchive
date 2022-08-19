@@ -85,6 +85,13 @@ sed -i 's#{DB_PASS}#'${DB_PASS}'#' /etc/benno-imap/imapsync.conf
 
 echo "Configuring /etc/benno-smtp/benno-smtp.conf"
 sed -i 's#{BENNO_LOG_DIR}#'${BENNO_LOG_DIR}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_AUTH_USER}#'${BENNO_SMTP_AUTH_USER}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_AUTH_PASS}#'${BENNO_SMTP_AUTH_PASS}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_TLS_ENABLED}#'${BENNO_SMTP_TLS_ENABLED}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_TLS_REQUIRED}#'${BENNO_SMTP_TLS_REQUIRED}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_KEYSTORE}#'${BENNO_SMTP_KEYSTORE}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_KEYSTORE_PASSWORD}#'${BENNO_SMTP_KEYSTORE_PASSWORD}'#' /etc/benno-smtp/benno-smtp.conf
+sed -i 's#{BENNO_SMTP_KEY_PASSWORD}#'${BENNO_SMTP_KEY_PASSWORD}'#' /etc/benno-smtp/benno-smtp.conf
 
 echo "Configuring /etc/benno-smtp/bennosmtp-log4j.xml"
 sed -i 's#{BENNO_LOG_DIR}#'${BENNO_LOG_DIR}'#' /etc/benno-smtp/bennosmtp-log4j.xml
@@ -112,7 +119,7 @@ if [ "_${PHPMYADMIN}_" = "_on_" ]; then
   a2enmod proxy
   a2enmod proxy_http
 fi
-# a2enmod rewrite
+a2enmod rewrite
 a2enmod headers
 
 # set owner and rights of volumes

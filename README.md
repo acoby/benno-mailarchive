@@ -122,6 +122,13 @@ docker logs -f benno
 | BENNO_LOG_DIR | /var/log/benno | defines the location of the Benno Log directory |
 | BENNO_SHARED_SECRET | random | if not changed, it will be recreated everytime you start the container |
 | BENNO_ADMIN_PASSWORD | random | if not changed, it will be recreated everytime you start the container |
+| BENNO_SMTP_AUTH_USER | none | If not none, then use this SMTP user for Benno SMTP |
+| BENNO_SMTP_AUTH_PASS | none | If not none, then use this SMTP password for Benno SMTP |
+| BENNO_SMTP_TLS_ENABLED | false | Enabled TLS option in Benno SMTP |
+| BENNO_SMTP_TLS_REQUIRED | false | Requires TLS connection in Benno SMTP |
+| BENNO_SMTP_KEYSTORE | /etc/benno-smtp/bennokeystore.jks | Path to Java Keystore for TLS Key |
+| BENNO_SMTP_KEYSTORE_PASSWORD | KeystorePassword | Passphrase for Benno SMTP Keystore |
+| BENNO_SMTP_KEY_PASSWORD | KeystorePassword | Password for Benno SMTP TLS Key |
 | DB_TYPE | sqlite | either `mysql` or `sqlite` |
 | DB_HOST | database | the name of the database host |
 | DB_PORT | 3306 | the port if used with mysql host |

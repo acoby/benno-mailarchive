@@ -1,0 +1,6 @@
+JAVA_OPTIONS=' -server '
+USER=benno
+
+DAEMON_ARGS='-c /etc/benno-smtp/benno-smtp.conf'
+
+START_DAEMON=yes
