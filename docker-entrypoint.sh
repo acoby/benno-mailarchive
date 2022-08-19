@@ -112,6 +112,8 @@ if [ "_${PHPMYADMIN}_" = "_on_" ]; then
   a2enmod proxy
   a2enmod proxy_http
 fi
+# a2enmod rewrite
+a2enmod headers
 
 # set owner and rights of volumes
 echo "Set Owner and rights of volumes"
