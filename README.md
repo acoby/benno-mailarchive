@@ -53,21 +53,19 @@ docker run \
   -v /opt/benno/logs/benno:/var/log/benno \
   -v /opt/benno/logs/apache2:/var/log/apache2 \
   --name benno \
-  mminks/docker-benno-mailarchive
+  docker.io/acoby/benno-mailarchive:latest
 ```
 
-### Determine data required for licensing
+### Retrive required license information
 
-Enter your docker container with
+When the docker container starts, it configures the container to match your requirements. Also
+it outputs the informations coming from `/etc/init.d/benno-rest info` to give your the license
+informations, you need.
 
-```
-docker exec -ti benno /bin/bash
-```
-
-and run
+Read the docker container log with
 
 ```
-/etc/init.d/benno-rest info
+docker logs benno
 ```
 
 This produces something like
@@ -104,7 +102,7 @@ docker run \
   -v /opt/benno/logs/apache:/var/log/apache \
   -v /path/to/your/benno.lic:/etc/benno/benno.lic \
   --name benno \
-  mminks/docker-benno-mailarchive
+  docker.io/acoby/benno-mailarchive:latest
 ```
 
 Check that everything is working properly with
@@ -115,14 +113,50 @@ docker logs -f benno
 
 ## Environment variables
 
-| Name | Description |
-|------|-------------|
-| MAIL_FROM | sets MAIL_FROM in /etc/benno-web/benno.conf |
+| Name | Default | Description |
+|------|---------|-------------|
+| BENNO_MAIL_FROM | benno@localhost | sets MAIL_FROM in /etc/benno-web/benno.conf |
+| BENNO_LOG_DIR | /var/log/benno | defines the location of the Benno Log directory |
+| BENNO_SHARED_SECRET | random | if not changed, it will be recreated everytime you start the container |
+| BENNO_ADMIN_PASSWORD | random | if not changed, it will be recreated everytime you start the container |
+| DB_TYPE | sqlite | either `mysql` or `sqlite` |
+| DB_HOST | database | the name of the database host |
+| DB_PORT | 3306 | the port if used with mysql host |
+| DB_NAME | /var/lib/benno-web/bennoweb.sqlite | the database name inside the host or the file name of the sqlite database |
+| DB_USER | username | the database user that has access to the database |
+| DB_PASS | password | the database user password |
+| PHPMYADMIN | off | in case of running a complex docker-compose environment with only on external open port, this will enable a proxy forward on /dbadmin url |
+
 
 ## Docker Compose
 
 ```
 version: '2.1'
+
+services:
+  benno:
+    image: mminks/docker-benno-mailarchive
+    hostname: benno.inovio.de
+    restart: always
+    ports:
+     - "8080:80"
+     - "2500:2500"
+    environment:
+     - BENNO_MAIL_FROM=mailarchive@inoxio.de
+     - BENNO_SHARED_SECRET=random
+     - BENNO_ADMIN_PASSWORD=mylittlescret
+     - DB_TYPE=sqlite
+     - DB_NAME=/var/lib/benno-web/bennoweb.sqlite
+    volumes:
+      - /opt/benno/archive:/srv/benno/archive
+      - /opt/benno/inbox:/srv/benno/inbox
+      - /opt/benno/database:/var/lib/benno-web
+      - /opt/benno/logs/benno:/var/log/benno
+      - /opt/benno/logs/apache:/var/log/apache
+      - /opt/benno/benno.lic:/etc/benno/benno.lic
+    networks:
+      benno:
+        ipv4_address: 172.18.100.1
 
 networks:
   benno:
@@ -133,28 +167,6 @@ networks:
       config:
       - subnet: 172.18.100.0/24
         gateway: 172.18.100.254
-
-services:
-  benno:
-    image: mminks/docker-benno-mailarchive
-    container_name: benno
-    hostname: benno
-    restart: always
-    domainname: inoxio.de
-    ports:
-     - "8082:80"
-     - "2500:2500"
-    environment:
-     - MAIL_FROM=mailarchive@inoxio.de
-    volumes:
-      - /opt/benno/archive:/srv/benno/archive
-      - /opt/benno/inbox:/srv/benno/inbox
-      - /opt/benno/logs/benno:/var/log/benno
-      - /opt/benno/logs/apache:/var/log/apache
-      - /opt/benno/benno.lic:/etc/benno/benno.lic
-    networks:
-      benno:
-        ipv4_address: 172.18.100.1
 ```
 
 ## Access benno-web

@@ -11,10 +11,25 @@ ARG BUILD_DATE
 ARG BUILD_VERSION
 ARG BUILD_BRANCH
 
+ENV TZ Europe/Berlin
+
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
-ENV TZ=Europe/Berlin
+
+ENV BENNO_LOG_DIR /var/log/benno
+ENV BENNO_SHARED_SECRET random
+ENV BENNO_ADMIN_PASSWORD random
+ENV BENNO_MAIL_FROM benno@localhost
+
+ENV DB_TYPE sqlite
+ENV DB_HOST database
+ENV DB_PORT 3306
+ENV DB_NAME /var/lib/benno-web/bennoweb.sqlite
+ENV DB_USER username
+ENV DB_PASS password
+
+ENV PHPMYADMIN off
 
 RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y
 RUN echo $TZ | tee /etc/timezone \
@@ -69,15 +84,26 @@ RUN echo $TZ | tee /etc/timezone \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY apache2-benno.conf /etc/apache2/sites-available/000-default.conf
 COPY docker-entrypoint.sh /
-COPY etc/init.d/benno-archive /etc/init.d/benno-archive
-COPY etc/init.d/benno-rest /etc/init.d/benno-rest
-COPY etc/init.d/benno-smtp /etc/init.d/benno-smtp
+
+COPY etc/ /etc/
+
+#COPY etc/init.d/benno-archive /etc/init.d/benno-archive
+#COPY etc/init.d/benno-rest /etc/init.d/benno-rest
+#COPY etc/init.d/benno-smtp /etc/init.d/benno-smtp
+#COPY etc/benno/benno.xml /etc/benno/benno.xml
+#COPY etc/benno/bennoarchive-log4j.xml /etc/benno/bennoarchive-log4j.xml
+#COPY etc/benno/bennorest-log4j.xml /etc/benno/bennorest-log4j.xml
+#COPY etc/benno-imap/imapauth.conf /etc/benno-imap/imapauth.conf
+#COPY etc/benno-imap/imapsync.conf /etc/benno-imap/imapsync.conf
+#COPY etc/benno-smtp/benno-smtp.conf /etc/benno-smtp/benno-smtp.conf
+#COPY etc/benno-smtp/bennosmtp-log4j.xml /etc/benno-smtp/bennosmtp-log4j.xml
+#COPY etc/benno-web/benno.conf /etc/benno-web/benno.conf
+#COPY etc/benno-web/rest.conf /etc/benno-web/rest.conf
 
 EXPOSE 80
 EXPOSE 2500
 
-VOLUME ["/srv/benno/archive", "/srv/benno/inbox", "/var/log/apache2", "/var/log/benno"]
+VOLUME ["/srv/benno/archive", "/srv/benno/inbox", "/var/log/apache2", "/var/log/benno", "/var/lib/benno-web"]
 
 CMD /docker-entrypoint.sh

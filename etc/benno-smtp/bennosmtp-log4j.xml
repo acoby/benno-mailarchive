@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="SmtpAppender"
+            class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="datePattern" value="'.'yyyy-MM-dd" />
+    <param name="file" value="{BENNO_LOG_DIR}/smtp.log" />
+    <param name="Append" value="true" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p%m%n" />
+    </layout>
+  </appender>
+
+  <appender name="DebugAppender"
+            class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="datePattern" value="'.'yyyy-MM-dd" />
+    <param name="file" value="{BENNO_LOG_DIR}/smtp-debug.log" />
+    <param name="Append" value="true" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p %c: %m%n" />
+    </layout>
+  </appender>
+
+  <appender name="STDERR" class="org.apache.log4j.ConsoleAppender">
+    <param name="target" value="System.err" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%-5p %c: %m%n" />
+    </layout>
+  </appender>
+
+  <!-- Debug Logger -->
+  <!--
+  <logger name="de.lwsystems.mailarchive" additivity="false" >
+    <level value="DEBUG" />
+    <appender-ref ref="DebugAppender" />
+  </logger>
+  -->
+
+  <!-- #################################################################### -->
+  <!-- LOGLEVEL: TRACE DEBUG INFO WARN ERROR FATAL -->
+  <root>
+    <priority value="INFO" />
+    <appender-ref ref="SmtpAppender" />
+  </root>
+
+</log4j:configuration>

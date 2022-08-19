@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="ArchiveAppender"
+            class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="datePattern" value="'.'yyyy-MM-dd" />
+    <param name="file" value="{BENNO_LOG_DIR}/archive.log" />
+    <param name="Append" value="true" />
+    <param name="Encoding" value="UTF-8" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p %m%n" />
+    </layout>
+  </appender>
+
+  <appender name="ExternalLibAppender"
+            class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="datePattern" value="'.'yyyy-MM-dd" />
+    <param name="file" value="{BENNO_LOG_DIR}/archive-externalLib.log" />
+    <param name="Append" value="true" />
+    <param name="Encoding" value="UTF-8" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p %c: %m%n" />
+    </layout>
+  </appender>
+
+  <appender name="DebugAppender"
+            class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="datePattern" value="'.'yyyy-MM-dd" />
+    <param name="file" value="{BENNO_LOG_DIR}/archive.log" />
+    <param name="Append" value="true" />
+    <param name="Encoding" value="UTF-8" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p %c: %m%n" />
+    </layout>
+  </appender>
+
+  <appender name="STDERR" class="org.apache.log4j.ConsoleAppender">
+    <param name="target" value="System.err" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%-5p %c: %m%n" />
+    </layout>
+  </appender>
+
+  <appender name="syslog" class="org.apache.log4j.net.SyslogAppender">
+    <param name="SyslogHost" value="127.0.0.1"/>
+    <param name="Facility" value="USER"/>
+    <param name="FacilityPrinting" value="true"/>
+    <layout class="org.apache.log4j.PatternLayout">
+    <param name="ConversionPattern"
+           value="%t %5r %-5p %-21d{yyyyMMdd HH:mm:ss,SSS} %c{2} [%x] %m %n"/> 
+    </layout> 
+  </appender>
+
+
+  <logger name="org.apache" additivity="false" >
+    <level value="ERROR"/>
+    <appender-ref ref="ArchiveAppender" />
+  </logger>
+
+  <logger name="de.lwsystems.mailarchive.archive.index" additivity="false" >
+    <level value="ERROR"/>
+    <appender-ref ref="ArchiveAppender" />
+  </logger>
+
+  <logger name="de.lwsystems.mailarchive.bennoarchive" additivity="false" >
+    <level value="INFO"/>
+    <appender-ref ref="ArchiveAppender" />
+  </logger>
+
+  <!-- Debug Benno MailArchive Logger -->
+  <!--
+  <logger name="de.lwsystems.mailarchive" additivity="false" >
+    <level value="DEBUG" />
+    <appender-ref ref="DebugAppender" />
+  </logger>
+  -->
+
+  <!-- #################################################################### -->
+  <!-- LOGLEVEL: TRACE DEBUG INFO WARN ERROR FATAL -->
+  <root>
+    <priority value="INFO" />
+    <appender-ref ref="ArchiveAppender" />
+  </root>
+
+</log4j:configuration>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<benno>
+   <configuredarchives>
+<!-- ####################################################################### -->
+      <containerarchive>
+         <identifier>BennoMailArchiv</identifier>
+         <conditions>
+            <all />
+         </conditions>
+         <directorywatcher directory="/srv/benno/inbox" pattern=".*.eml">
+            <mailfile>
+               <senderheaders>
+                  <name>X-REAL-MAILFROM</name>
+                  <name>RECIPIENT-FROM</name>
+                  <name>From</name>
+               </senderheaders>
+               <recipientheaders>
+                  <name>X-REAL-RCPTTO</name>
+                  <name>RECIPIENT-TO</name>
+                  <name>BCC</name>
+                  <name>To</name>
+                  <name>Cc</name>
+               </recipientheaders>
+               <secretheaders>
+                  <name>X-REAL-MAILFROM</name>
+                  <name>RECIPIENT-FROM</name>
+                  <name>X-REAL-RCPTTO</name>
+                  <name>RECIPIENT-TO</name>
+                  <name>X-BENNO-GW</name>
+                  <name>BCC</name>
+               </secretheaders>
+            </mailfile>
+         </directorywatcher>
+         <configuredcontainers>
+<!-- ####################################################################### -->
+            <simplecontainer>
+               <identifier>BennoContainer</identifier>
+               <conditions>
+                  <all />
+               </conditions>
+               <luceneindex version="LUCENE_36">
+                  <directory>/srv/benno/archive/index</directory>
+               </luceneindex>
+               <yearlyfsbox>
+                  <fshexbennobox>
+                     <monthlyfsjournal/>
+                     <directory>/srv/benno/archive/repo</directory>
+                     <subdirs>3</subdirs>
+                     <dirlength>2</dirlength>
+                     <compression>gzip</compression>
+                  </fshexbennobox>
+               </yearlyfsbox>
+            </simplecontainer>
+<!-- ####################################################################### -->
+         </configuredcontainers>
+      </containerarchive>
+   </configuredarchives>
+  <bennoRest>
+    <jettyConfig>/etc/benno/jetty.xml</jettyConfig>
+    <passwdFile>/etc/benno/rest.secret</passwdFile>
+    <indexCacheTTL>300000</indexCacheTTL>
+  </bennoRest>
+</benno>
