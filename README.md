@@ -71,8 +71,11 @@ docker logs benno
 This produces something like
 
 ```
+Benno Licence Information
+---
 Host-Info: 172.18.100.1/benno.inoxio.de
 Build-Info: 2016-02-02 16:50:31
+---
 ```
 
 Send this to LWsystems GmbH & Co. KG support (support@benno-mailarchiv.de) and wait for your license file. Once you received your file, go on to the next step.

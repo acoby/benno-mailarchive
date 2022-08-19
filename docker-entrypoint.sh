@@ -17,15 +17,19 @@ if [ "_${BENNO_ADMIN_PASSWORD}_" = "_random_" ]; then
 fi
 
 # set secret
-echo "Configure Hostname and Secrets"
+echo "Configuring /etc/benno/rest.secret"
 echo "${BENNO_SHARED_SECRET}" > /etc/benno/rest.secret
 
+echo "Configuring /etc/benno/benno.xml"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno/benno.xml
 
+echo "Configuring /etc/benno/bennoarchive-log4j.xml"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno/bennoarchive-log4j.xml
 
+echo "Configuring /etc/benno/bennorest-log4j.xml"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno/bennorest-log4j.xml
 
+echo "Configuring /etc/benno-imap/imapauth.conf"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno-imap/imapauth.conf
 sed -i 's/{DB_TYPE}/'${DB_TYPE}'/' /etc/benno-imap/imapauth.conf
 sed -i 's/{DB_HOST}/'${DB_HOST}'/' /etc/benno-imap/imapauth.conf
@@ -34,6 +38,7 @@ sed -i 's/{DB_NAME}/'${DB_NAME}'/' /etc/benno-imap/imapauth.conf
 sed -i 's/{DB_USER}/'${DB_USER}'/' /etc/benno-imap/imapauth.conf
 sed -i 's/{DB_PASS}/'${DB_PASS}'/' /etc/benno-imap/imapauth.conf
 
+echo "Configuring /etc/benno-imap/imapsync.conf"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno-imap/imapsync.conf
 sed -i 's/{DB_TYPE}/'${DB_TYPE}'/' /etc/benno-imap/imapsync.conf
 sed -i 's/{DB_HOST}/'${DB_HOST}'/' /etc/benno-imap/imapsync.conf
@@ -42,9 +47,13 @@ sed -i 's/{DB_NAME}/'${DB_NAME}'/' /etc/benno-imap/imapsync.conf
 sed -i 's/{DB_USER}/'${DB_USER}'/' /etc/benno-imap/imapsync.conf
 sed -i 's/{DB_PASS}/'${DB_PASS}'/' /etc/benno-imap/imapsync.conf
 
+echo "Configuring /etc/benno-smtp/benno-smtp.conf"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno-smtp/benno-smtp.conf
+
+echo "Configuring /etc/benno-smtp/bennosmtp-log4j.xml"
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno-smtp/bennosmtp-log4j.xml
 
+echo "Configuring /etc/benno-web/benno.conf"
 sed -i 's/{BENNO_MAIL_FROM}/'${BENNO_MAIL_FROM}'/' /etc/benno-web/benno.conf
 sed -i 's/{BENNO_SHARED_SECRET}/'${BENNO_SHARED_SECRET}'/' /etc/benno-web/benno.conf
 sed -i 's/{BENNO_LOG_DIR}/'${BENNO_LOG_DIR}'/' /etc/benno-web/benno.conf
@@ -55,8 +64,10 @@ sed -i 's/{DB_NAME}/'${DB_NAME}'/' /etc/benno-web/benno.conf
 sed -i 's/{DB_USER}/'${DB_USER}'/' /etc/benno-web/benno.conf
 sed -i 's/{DB_PASS}/'${DB_PASS}'/' /etc/benno-web/benno.conf
 
+echo "Configuring /etc/benno-web/rest.conf"
 sed -i 's/{BENNO_SHARED_SECRET}/'${BENNO_SHARED_SECRET}'/' /etc/benno-web/rest.conf
 
+echo "Configuring /etc/postfix/main.cf"
 sed -ri -e "s/^myhostname =.*/myhostname = ${HOSTNAME}/g" /etc/postfix/main.cf
 
 if [ "_${PHPMYADMIN}_" = "_on_" ]; then
@@ -65,10 +76,6 @@ if [ "_${PHPMYADMIN}_" = "_on_" ]; then
   a2enmod proxy
   a2enmod proxy_http
 fi
-
-# set default admin pasword
-echo "Configure Admin User"
-benno-useradmin -u admin -p $BENNO_ADMIN_PASSWORD
 
 # set owner and rights of volumes
 echo "Set Owner and rights of volumes"
@@ -90,8 +97,14 @@ chown -R root:adm ${APACHE_LOG_DIR}
 chmod 750 ${APACHE_LOG_DIR}
 chmod 755 /etc/init.d/benno*
 
+# set default admin pasword
+echo "Configure Admin User"
+benno-useradmin -u admin -p $BENNO_ADMIN_PASSWORD
+
 echo "Benno Licence Information"
+echo "---"
 /etc/init.d/benno-rest info
+echo "---"
 
 # starting benno services
 echo "Start Benno Rest"
