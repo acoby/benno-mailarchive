@@ -132,7 +132,7 @@ chmod 770 /var/lib/benno-web
 
 chmod 640 /etc/benno-web/benno.conf
 chmod 640 /etc/benno/rest.secret
-chown -R benno:benno /srv/benno/archive /srv/benno/inbox
+nohup chown -R benno:benno /srv/benno/archive /srv/benno/inbox
 chmod 755 /srv/benno/archive
 chmod 770 /srv/benno/inbox
 
@@ -144,7 +144,7 @@ chmod 755 /etc/init.d/benno*
 
 # set default admin pasword
 echo "Configure Admin User"
-benno-useradmin -u admin -p $BENNO_ADMIN_PASSWORD
+benno-useradmin -u admin -p $BENNO_ADMIN_PASSWORD -e ${BENNO_MAIL_FROM}
 
 echo "Benno Licence Information"
 echo "---"
